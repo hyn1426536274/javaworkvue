@@ -6,11 +6,11 @@
   
       <div class="article-info">
         <div class="article-meta">
-          <p><strong>作者:</strong> {{ articleData.username }}</p>
+          <p class="author" @click="toUserPage"><strong>作者:</strong> {{ articleData.username }}</p>
           <p><strong>是否发表:</strong> {{ articleData.published ? 'Yes' : 'No' }}</p>
           <!-- <p><strong>Views:</strong> {{ articleData.views }}</p>
           <p><strong>Comments:</strong> {{ articleData.comment_count }}</p> -->
-          <p><strong>文章类型:</strong> {{ articleData.type_id }}</p>
+          <p><strong>文章类型:</strong> {{ typeObj? typeObj.name : '无' }}</p>
           <!-- 其他文章信息 -->
         </div>
         <div class="article-timestamps">
@@ -45,6 +45,7 @@
         searchResult: null,
         error: null,
         articleData:null,
+        typeObj: null,
         is_self: null,
       };
     },
@@ -52,10 +53,10 @@
       this.getArticleData();
     },
     computed: {
-    compiledMarkdown() {
-      return marked.parse(this.articleData.content);
+      compiledMarkdown() {
+        return marked(this.articleData.content, { sanitize: true });
+      },
     },
-  },
     methods: {
       async getArticleData() {
         try {
@@ -63,8 +64,6 @@
           formData.append('user_id', this.$route.query.user_id);
           formData.append('title', this.$route.query.title);
           
-          
-
           const response = await axios.post('http://localhost:8888/user/article', formData, {
             withCredentials: true,
           });
@@ -72,10 +71,12 @@
           this.searchResult = response.data;
           this.articleData = this.searchResult.data;
           // 传输过来的是字符串，即使是false字符串在v-if中也会被当作true
-          
           this.is_self = JSON.parse(this.$route.query.is_self);
-            // console.log("this.is_self", typeof(this.is_self), this.is_self);
-            // console.log("this.$route.query.is_self", typeof(this.$route.query.is_self), this.$route.query.is_self);
+
+          if(this.articleData.type_id){
+            await this.getTypeName(this.articleData.type_id);
+          }
+          
           this.error = null;
         } catch (error) {
           this.error = error.message;
@@ -86,14 +87,39 @@
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
     },
-
+    async getTypeName(type_id){
+      try {
+        const formData = new FormData();
+        formData.append('id', type_id);
+        const response = await axios.post('http://localhost:8888/getTypeById', formData, {
+          withCredentials: true,
+        });
+        this.searchResult = response.data;
+        console.log("typeObj", this.searchResult.data);
+        this.typeObj = this.searchResult.data;
+        this.error = null;
+      } catch (error) {
+        this.error = error.message;
+        this.searchResult = null;
+      }
+    },
     toEditPage(){
         //跳转到编辑页面
         this.$router.push({
         name: 'editblog',
         query: {
             articleData: JSON.stringify(this.articleData),
+            isEdit: true, // 编辑或新建
             // is_self: this.$route.query.is_self,
+        },
+        });
+    },
+    toUserPage(){
+        //跳转到用户页面
+        this.$router.push({
+        name: 'userhome',
+        query: {
+            username: this.articleData.username,
         },
         });
     }
@@ -148,6 +174,20 @@ button:hover {
     border-radius: 4px;
 
   }
+.author{
+  cursor: pointer;
+  /* 边框 */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 4px;
+  transition: all 0.3s;
+}
+.author:hover{
+  color: #3ac17a;
+  border: 1px solid #3ac17a;
+
+}
+  
 
   .article-meta,
   .article-timestamps {
