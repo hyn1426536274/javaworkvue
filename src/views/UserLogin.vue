@@ -49,9 +49,8 @@ export default {
 
                 // 处理成功响应
                 this.searchResult = response.data;
+                window.alert(this.searchResult.message);
                 if(this.searchResult.status == 1){
-                    console.log("登录成功");
-                    console.log(this.searchResult.data);
                     this.$router.push({
                         // 如果想用query传递对象，需要用JSON.stringify()转换为字符串，再用JSON.parse()转换为对象
                         name:`userhome`,
