@@ -39,7 +39,7 @@
         </div>
         <div class="button-contain">
           <button class="submit" type="submit" @click="submitForm">提交</button>
-          <button class="delete" type="submit" @click="deleteBlog">删除此博客</button>
+          <button class="delete" v-if="isEdit" type="submit" @click="deleteBlog">删除此博客</button>
         </div>
       </form>
       <div v-if="blog.content">

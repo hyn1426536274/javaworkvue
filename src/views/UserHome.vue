@@ -19,6 +19,9 @@
         <div class="article-class-menu">
           <span>文章目录:</span>
           <div class="class-list-container">
+            <div class="class-item">
+              <p @click="getBlogByClass(0)">所有文章</p>
+            </div>
             <div v-for="blogClass in classList" :key="blogClass.id" class="class-item">
               <p @click="getBlogByClass(blogClass.id)">{{ blogClass.name }}</p>
             </div>

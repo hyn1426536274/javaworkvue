@@ -1,4 +1,5 @@
 <template>
+  <div class="loading" v-if="onLoading">正在处理……</div>
   <div class="registration-form">
     <h3>REGISTER</h3>
     <!-- 表单元素 -->
@@ -24,10 +25,10 @@
 
     <form v-if="isSended" @submit.prevent="VertifyCode">
       <div class="form-group">
-        <label for="code">Verification Code:</label>
+        <label for="code">填写验证码：</label>
         <input type="text" id="code" v-model="code" placeholder="Enter your verification code">
       </div>
-      <button type="submit">Complete Registration</button>
+      <button type="submit">注册</button>
     </form>
   </div>
 </template>
@@ -47,6 +48,7 @@
         isSended: null,
         searchResult: null,
         error: null,
+        onLoading: false,
       };
     },
     methods: {
@@ -59,12 +61,13 @@
             formData.append('password', this.password);
             formData.append('password2', this.password2);
 
-            console.log("FormData: ",formData);
+            // console.log("FormData: ",formData);
           // 发送 POST 请求
           // 携带cookie
+          this.onLoading = true;
           const response = await axios.post('http://localhost:8888/admin/register', formData, {
             withCredentials: true,});
-  
+          this.onLoading = false;
           // 处理成功响应
           this.searchResult = response.data;
           alert(this.searchResult.message);
@@ -95,8 +98,7 @@
           alert(this.searchResult.message);
           if(this.searchResult.status == 1){
             this.$router.push({
-              name:`/user/login`,
-
+              name:`login`,
             });
           }
           this.error = null;
@@ -149,6 +151,24 @@ input {
   height: 20px;
   /* 对齐 */
   float: right;
+}
+
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 背景颜色 */
+  background-color: rgba(0, 0, 0, 0.3);
+  /* 垂直水平居中 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 字体颜色 */
+  color: #fff;
+  font-size: 20px;
+  z-index: 999;
 }
 
 button {
