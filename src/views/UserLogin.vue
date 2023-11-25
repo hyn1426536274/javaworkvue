@@ -1,5 +1,14 @@
 <template>
-    <div class="login-container">
+    <div v-if="hasLogin" class="login-container">
+      <h3>LOGIN_OUT</h3>
+      <form @submit.prevent="loginOut">
+        <div class="form-group">
+          <strong>当前用户：{{ current_user.username }}</strong>
+        </div>
+        <button type="submit">退出登录</button>
+      </form>
+    </div>
+    <div v-else class="login-container">
       <h3>LOGIN</h3>
       <form @submit.prevent="submitForm">
         <div class="form-group">
@@ -13,6 +22,7 @@
         <button type="submit">登录</button>
       </form>
     </div>
+
   </template>
 
 <script>
@@ -26,13 +36,16 @@ export default {
             username: '',
             password: '',
             searchResult: null, // 要初始化传值，不然有问题
-            error: null
+            error: null,
+            hasLogin: false,
+            current_user: null,
         }
+    },
+    created() {
+        this.isLogin();
     },
     methods: {
         async submitForm() {
-            
-
             // 提交表单的逻辑
             try {
                 // 创建 FormData 对象，用于存储表单数据
@@ -66,11 +79,61 @@ export default {
                 this.error = error.message;
                 this.searchResult = null;
             }
+        },
+        async isLogin() {
+            // 提交表单的逻辑
+            try {
+                // 发送 POST 请求
+                const response = await axios.post('http://localhost:8888/admin/isLogin', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        withCredentials: true,}); 
+
+                // 处理成功响应
+                this.searchResult = response.data;
+                if(this.searchResult.status == 1){
+                    this.hasLogin = true;
+                    this.current_user = this.searchResult.data;
+                }
+                this.error = null;
+
+            } catch (error) {
+                // 处理错误
+                this.error = error.message;
+                this.searchResult = null;
+            }
+        },
+        async loginOut(){
+            // 提交表单的逻辑
+            try {
+                // 发送 POST 请求
+                const response = await axios.post('http://localhost:8888/admin/loginOut', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        withCredentials: true,}); 
+
+                // 处理成功响应
+                this.searchResult = response.data;
+                window.alert(this.searchResult.message);
+                if(this.searchResult.status == 1){
+                    this.hasLogin = false;
+                    this.current_user = null;
+                }
+                this.error = null;
+
+            } catch (error) {
+                // 处理错误
+                this.error = error.message;
+                this.searchResult = null;
+            }
         }
     }
 
 }
 </script>
+
 <style scoped>
 .login-container {
   max-width: 400px;
