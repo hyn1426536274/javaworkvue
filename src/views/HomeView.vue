@@ -2,8 +2,8 @@
   <div class="home">
     <!-- 表单元素 -->
     <form @submit.prevent="searchByTitle" class="search-form">
-      <label for="title">搜索文章</label>
-      <input type="text" id="title" v-model="title" placeholder="输入文章标题">
+      <label for="title">搜索博客</label>
+      <input type="text" id="title" v-model="title" placeholder="输入博客标题">
       <button type="submit">搜索</button>
     </form>
   
