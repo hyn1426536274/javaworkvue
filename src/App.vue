@@ -1,10 +1,11 @@
 <template>
   <nav>
+    <p class="nav-logo">Blogs</p>
     <router-link to="/">主页</router-link> |
     <router-link to="/user">用户</router-link>|
     <router-link to="/admin">管理</router-link>
-    
   </nav>
+  <p class="bg-logo">Blogs</p>
   <router-view/>
 </template>
 
@@ -15,6 +16,25 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #333; /* 更改为更柔和的文字颜色 */
+}
+.bg-logo {
+  position: absolute;
+  top: 45%;
+  left: calc(50% - 160px);
+  color: rgba(78, 217, 154, 0.3); /* 添加文字颜色 */
+  font-size: 100px; /* 添加文字大小 */
+  font-weight: bold; /* 添加文字粗细 */
+  padding: 20px; /* 添加内边距 */
+  margin: 0; /* 去掉外边距 */
+  z-index: -1; /* 将元素放到最底层 */
+}
+.nav-logo {
+  position: absolute;
+  left: 100;
+  color: #3abc81;
+  font-size: 20px; /* 添加文字大小 */
+  font-weight: bold; /* 添加文字粗细 */
+  margin: 0; /* 去掉外边距 */
 }
 
 nav {

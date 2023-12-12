@@ -34,25 +34,13 @@ const routes = [
         path: 'blog/editBlog',
         name: 'editblog',
         component: () => import('../views/EditBlog.vue')
-      },
-  //     {
-  //       path: 'blog/deleteBlog',
-  //       name: 'delete-blog',
-  //       component: () => import('../views/DeleteBlog.vue')
-  //     }
+      }
     ]
   },
   {
     path: '/index',
     name: 'index',
     component: HomeView, // 创建一个 IndexView.vue 文件
-    // children: [
-    //   {
-    //     path: 'search',
-    //     name: 'search',
-    //     component: () => import('../views/SearchView.vue')
-    //   }
-    // ]
   },
   {
     path: '/admin',
@@ -68,12 +56,7 @@ const routes = [
         path: 'register',
         name: 'register',
         component: () => import('../views/UserRegister.vue')
-      },
-      // {
-      //   path: 'verifyCode',
-      //   name: 'verify-code',
-      //   component: () => import('../views/VerifyCode.vue')
-      // }
+      }
     ]
   }
 ];

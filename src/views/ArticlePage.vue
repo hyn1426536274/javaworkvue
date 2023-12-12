@@ -141,14 +141,6 @@
     color: #333;
   }
 
-  /* .edit-button {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 8px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  } */
   button {
   margin-bottom: 20px;
     padding: 5px 10px;
