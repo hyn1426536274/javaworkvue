@@ -5,6 +5,7 @@
     <p>文章类型: <span class="article-type">{{ typeObj? typeObj.name : '无' }}</span></p>
     <p class="description">{{ article.description }}</p>
     <div class="info">
+      <p><strong>浏览量:</strong> {{ article.views }}</p>
       <p><strong>创建时间:</strong> {{ formatDate(article.create_time) }}</p>
       <p><strong>最后更新时间:</strong> {{ formatDate(article.update_time) }}</p>
       <p><strong>是否公开:</strong> {{ article.published ? '是' : '否' }}</p>
